@@ -1,722 +1,872 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chucky's Playground - House Party Events</title>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  />
-  <style>
-    :root {
-      --neon-pink: #ff00ff;
-      --neon-purple: #8a2be2;
-      --neon-blue: #00ffff;
-      --neon-green: #00ff00;
-      --dark-bg: #0f0b1a;
-      --card-bg: #1a142f;
-      --text-primary: #ffffff;
-      --text-secondary: #e0d6ff;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      background: linear-gradient(135deg, var(--dark-bg), #1a0b2e);
-      color: var(--text-primary);
-      overflow-x: hidden;
-      min-height: 100vh;
-    }
-
-    .neon-glow {
-      text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink),
-        0 0 30px var(--neon-pink);
-    }
-
-    .neon-border {
-      border: 2px solid var(--neon-pink);
-      box-shadow: 0 0 15px var(--neon-pink);
-    }
-
-    .floating-circles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: -1;
-    }
-
-    .floating-circle {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(
-        circle,
-        rgba(255, 0, 255, 0.1) 0%,
-        transparent 70%
-      );
-      animation: float 15s infinite ease-in-out;
-    }
-
-    @keyframes float {
-      0%,
-      100% {
-        transform: translate(0, 0) rotate(0deg);
-      }
-      25% {
-        transform: translate(20px, 20px) rotate(90deg);
-      }
-      50% {
-        transform: translate(0, 40px) rotate(180deg);
-      }
-      75% {
-        transform: translate(-20px, 20px) rotate(270deg);
-      }
-    }
-
-    header {
-      background: rgba(15, 11, 26, 0.9);
-      padding: 1rem 2rem;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(10px);
-      border-bottom: 2px solid var(--neon-pink);
-    }
-
-    .navbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 1.8rem;
-      font-weight: 800;
-    }
-
-    .logo i {
-      color: var(--neon-pink);
-      font-size: 2rem;
-    }
-
-    .logo-text {
-      background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .admin-btn {
-      background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
-      border: none;
-      color: white;
-      padding: 8px 20px;
-      border-radius: 25px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .admin-btn:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px var(--neon-pink);
-    }
-
-    .hero {
-      min-height: 80vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 2rem;
-      position: relative;
-    }
-
-    .hero-content {
-      max-width: 800px;
-      background: rgba(26, 20, 47, 0.8);
-      backdrop-filter: blur(10px);
-      border-radius: 20px;
-      padding: 3rem;
-      border: 2px solid var(--neon-pink);
-      box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
-    }
-
-    .hero h1 {
-      font-size: 3.5rem;
-      margin-bottom: 1.5rem;
-      line-height: 1.2;
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 2.5rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: 14px 36px;
-      background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
-      color: white;
-      border: none;
-      border-radius: 50px;
-      font-weight: 700;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-      font-size: 1.1rem;
-      cursor: pointer;
-    }
-
-    .btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(255, 0, 255, 0.4);
-    }
-
-    .event-details {
-      max-width: 1200px;
-      margin: 4rem auto;
-      padding: 0 2rem;
-    }
-
-    .section-title {
-      text-align: center;
-      margin-bottom: 3rem;
-      font-size: 2.5rem;
-      position: relative;
-      display: inline-block;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--neon-pink);
-    }
-
-    .event-card {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 2.5rem;
-      margin: 2rem auto;
-      max-width: 800px;
-      border: 2px solid rgba(255, 0, 255, 0.3);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-      backdrop-filter: blur(10px);
-    }
-
-    .event-card h3 {
-      font-size: 2rem;
-      margin-bottom: 1.5rem;
-      color: var(--neon-pink);
-      text-align: center;
-    }
-
-    .event-info {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem;
-      margin: 2.5rem 0;
-    }
-
-    .info-item {
-      text-align: center;
-      padding: 1.5rem;
-      background: rgba(138, 43, 226, 0.1);
-      border-radius: 15px;
-      border: 1px solid var(--neon-purple);
-    }
-
-    .info-item i {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .ticket-section {
-      background: var(--card-bg);
-      border-radius: 20px;
-      padding: 2.5rem;
-      margin: 4rem auto;
-      border: 2px solid var(--neon-green);
-      max-width: 700px;
-      box-shadow: 0 15px 35px rgba(0, 255, 0, 0.2);
-      backdrop-filter: blur(10px);
-    }
-
-    .ticket-section h3 {
-      text-align: center;
-      margin-bottom: 2rem;
-      color: var(--neon-green);
-      font-size: 2rem;
-    }
-
-    .price {
-      font-size: 3rem;
-      text-align: center;
-      margin: 1.5rem 0;
-      color: var(--neon-pink);
-      font-weight: 800;
-      text-shadow: 0 0 15px var(--neon-pink);
-    }
-
-    .mpesa-info {
-      background: rgba(0, 255, 255, 0.1);
-      border: 2px solid var(--neon-blue);
-      border-radius: 15px;
-      padding: 2rem;
-      margin: 2rem 0;
-    }
-
-    .mpesa-info h4 {
-      color: var(--neon-blue);
-      margin-bottom: 1.5rem;
-      font-size: 1.5rem;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .mpesa-steps {
-      list-style: none;
-    }
-
-    .mpesa-steps li {
-      padding: 0.8rem 0;
-      border-bottom: 1px solid rgba(0, 255, 255, 0.2);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .mpesa-steps li:last-child {
-      border-bottom: none;
-    }
-
-    .mpesa-steps li strong {
-      color: var(--neon-pink);
-    }
-
-    .whatsapp-btn {
-      display: block;
-      width: 100%;
-      padding: 16px;
-      background: linear-gradient(45deg, #25d366, #128c7e);
-      color: white;
-      border: none;
-      border-radius: 15px;
-      font-weight: 700;
-      font-size: 1.2rem;
-      margin-top: 1.5rem;
-      text-decoration: none;
-      text-align: center;
-      transition: all 0.3s ease;
-    }
-
-    .whatsapp-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
-    }
-
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(15, 11, 26, 0.95);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      backdrop-filter: blur(10px);
-      visibility: hidden;
-      opacity: 0;
-      transition: opacity 0.3s ease, visibility 0.3s;
-    }
-
-    .modal.show {
-      visibility: visible;
-      opacity: 1;
-    }
-
-    .modal-content {
-      background: linear-gradient(135deg, var(--card-bg), #251a40);
-      border: 2px solid var(--neon-pink);
-      border-radius: 20px;
-      padding: 2.5rem;
-      width: 90%;
-      max-width: 600px;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 2px solid var(--neon-pink);
-    }
-
-    .close-modal {
-      background: none;
-      border: none;
-      color: var(--neon-pink);
-      font-size: 1.8rem;
-      cursor: pointer;
-      transition: transform 0.3s ease;
-    }
-
-    .close-modal:hover {
-      transform: rotate(90deg);
-    }
-
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 0.8rem;
-      color: var(--neon-blue);
-      font-weight: 600;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 12px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px solid var(--neon-pink);
-      border-radius: 10px;
-      color: var(--text-primary);
-      font-size: 1rem;
-      transition: all 0.3s ease;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      outline: none;
-      border-color: var(--neon-blue);
-      box-shadow: 0 0 10px var(--neon-blue);
-    }
-
-    .form-group textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    .password-input {
-      position: relative;
-    }
-
-    .toggle-password {
-      position: absolute;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: var(--neon-pink);
-      cursor: pointer;
-      font-size: 1.2rem;
-    }
-
-    .error-message {
-      color: #ff4757;
-      text-align: center;
-      margin: 1rem 0;
-      font-weight: 600;
-    }
-
-    footer {
-      text-align: center;
-      padding: 2.5rem;
-      margin-top: 4rem;
-      border-top: 2px solid var(--neon-pink);
-      color: var(--text-secondary);
-      background: rgba(15, 11, 26, 0.8);
-    }
-
-    @media (max-width: 768px) {
-      .hero h1 {
-        font-size: 2.2rem;
-      }
-
-      .hero-content {
-        padding: 2rem 1.5rem;
-      }
-
-      .event-info {
-        grid-template-columns: 1fr;
-      }
-
-      .price {
-        font-size: 2.2rem;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chucky's Playground - House Party Events</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-purple: #8a2be2;
+            --neon-blue: #00ffff;
+            --neon-green: #00ff00;
+            --dark-bg: #0f0b1a;
+            --card-bg: #1a142f;
+            --text-primary: #ffffff;
+            --text-secondary: #e0d6ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, var(--dark-bg), #1a0b2e);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+        
+        .neon-glow {
+            text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink), 0 0 30px var(--neon-pink);
+        }
+        
+        .neon-border {
+            border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+        
+        .floating-circles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .floating-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,0,255,0.1) 0%, transparent 70%);
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(20px, 20px) rotate(90deg); }
+            50% { transform: translate(0, 40px) rotate(180deg); }
+            75% { transform: translate(-20px, 20px) rotate(270deg); }
+        }
+        
+        header {
+            background: rgba(15, 11, 26, 0.9);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--neon-pink);
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+        
+        .logo i {
+            color: var(--neon-pink);
+            font-size: 2rem;
+        }
+        
+        .logo-text {
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .admin-btn {
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .admin-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-pink);
+        }
+        
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            background: rgba(26, 20, 47, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 3rem;
+            border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.3);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 14px 36px;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-purple));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(255, 0, 255, 0.4);
+        }
+        
+        .event-details {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            color: var(--neon-pink);
+        }
+        
+        .event-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 2rem auto;
+            max-width: 800px;
+            border: 2px solid rgba(255, 0, 255, 0.3);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        
+        .event-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--neon-pink);
+            text-align: center;
+        }
+        
+        .event-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 2.5rem 0;
+        }
+        
+        .info-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 15px;
+            border: 1px solid var(--neon-purple);
+        }
+        
+        .info-item i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .ticket-section {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin: 4rem auto;
+            border: 2px solid var(--neon-green);
+            max-width: 700px;
+            box-shadow: 0 15px 35px rgba(0, 255, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        
+        .ticket-section h3 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--neon-green);
+            font-size: 2rem;
+        }
+        
+        .price {
+            font-size: 3rem;
+            text-align: center;
+            margin: 1.5rem 0;
+            color: var(--neon-pink);
+            font-weight: 800;
+            text-shadow: 0 0 15px var(--neon-pink);
+        }
+        
+        .mpesa-info {
+            background: rgba(0, 255, 255, 0.1);
+            border: 2px solid var(--neon-blue);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .mpesa-info h4 {
+            color: var(--neon-blue);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mpesa-steps {
+            list-style: none;
+        }
+        
+        .mpesa-steps li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .mpesa-steps li:last-child {
+            border-bottom: none;
+        }
+        
+        .mpesa-steps li strong {
+            color: var(--neon-pink);
+        }
+        
+        .whatsapp-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 11, 26, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, var(--card-bg), #251a40);
+            border: 2px solid var(--neon-pink);
+            border-radius: 20px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--neon-pink);
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--neon-pink);
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            transform: rotate(90deg);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--neon-blue);
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid var(--neon-pink);
+            border-radius: 10px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .password-input {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--neon-pink);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        .error-message {
+            color: #ff4757;
+            text-align: center;
+            margin: 1rem 0;
+            font-weight: 600;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2.5rem;
+            margin-top: 4rem;
+            border-top: 2px solid var(--neon-pink);
+            color: var(--text-secondary);
+            background: rgba(15, 11, 26, 0.8);
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero-content {
+                padding: 2rem 1.5rem;
+            }
+            
+            .event-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .price {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <div class="floating-circles" id="floatingCircles"></div>
-
-  <header>
-    <nav class="navbar">
-      <div class="logo">
-        <i class="fas fa-ghost"></i>
-        <div class="logo-text">Chucky's Playground</div>
-      </div>
-      <button class="admin-btn" id="adminBtn">
-        <i class="fas fa-shield-alt"></i>
-        Admin
-      </button>
-    </nav>
-  </header>
-
-  <section class="hero">
-    <div class="hero-content">
-      <h1 class="neon-glow" id="eventTitle">Chucky's Neon Rave</h1>
-      <p id="eventDescription">
-        Get ready for the wildest house party of the year! Join us for an
-        unforgettable night of music, dancing, and pure chaos. Expect top DJs,
-        neon lights, and memories that will last forever!
-      </p>
-      <a href="#tickets" class="btn">Get Your Tickets Now!</a>
+    <div class="floating-circles" id="floatingCircles"></div>
+    
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-ghost"></i>
+                <div class="logo-text">Chucky's Playground</div>
+            </div>
+            <button class="admin-btn" id="adminBtn">
+                <i class="fas fa-shield-alt"></i>
+                Admin
+            </button>
+        </nav>
+    </header>
+    
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="neon-glow" id="eventTitle">Chucky's Neon Rave</h1>
+            <p id="eventDescription">Get ready for the wildest house party of the year! Join us for an unforgettable night of music, dancing, and pure chaos. Expect top DJs, neon lights, and memories that will last forever!</p>
+            <a href="#tickets" class="btn">Get Your Tickets Now!</a>
+        </div>
+    </section>
+    
+    <section class="event-details">
+        <div class="event-card">
+            <h3>Event Details</h3>
+            <div class="event-info">
+                <div class="info-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div>
+                        <strong>Date</strong>
+                        <div id="eventDate">Saturday, December 15, 2025</div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>Time</strong>
+                        <div id="eventTime">9:00 PM - 5:00 AM</div>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div>
+                        <strong>Location</strong>
+                        <div id="eventLocation">The Underground Loft, Nairobi</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="ticket-section" id="tickets">
+        <h3><i class="fas fa-ticket-alt"></i> Ticket Information</h3>
+        <div class="price" id="ticketPrice">KES 3,000</div>
+        <p>Limited tickets available! Secure your spot now.</p>
+        
+        <div class="mpesa-info">
+            <h4><i class="fab fa-mpesa"></i> M-Pesa Payment Instructions</h4>
+            <ol class="mpesa-steps">
+                <li>Go to M-Pesa on your phone</li>
+                <li>Select <strong>"Lipa Na M-Pesa"</strong></li>
+                <li>Choose <strong>"Buy Goods and Services"</strong></li>
+                <li>Enter Till Number: <strong id="paybillNumber">876543</strong></li>
+                <li>Account Number: <strong id="accountNumber">CHUCKYRAVE</strong></li>
+                <li>Enter Amount: <strong id="mpesaAmount">3000</strong></li>
+                <li>Enter your M-Pesa PIN and send</li>
+            </ol>
+            <div class="important-note">
+                <p><strong>Important:</strong> After payment, send your M-Pesa confirmation message to <strong id="whatsappNumber">+254700000000</strong> with your full name to confirm your ticket.</p>
+            </div>
+        </div>
+        
+        <a href="https://wa.me/254700000000" class="whatsapp-btn">
+            <i class="fab fa-whatsapp"></i> WhatsApp for Confirmation
+        </a>
+    </section>
+    
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Admin Access</h3>
+                <button class="close-modal" id="closeAdmin">&times;</button>
+            </div>
+            
+            <div id="loginForm">
+                <div class="form-group password-input">
+                    <label for="adminPassword">Admin Password</label>
+                    <input type="password" id="adminPassword" placeholder="Enter admin password">
+                    <button class="toggle-password" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div id="passwordError" class="error-message" style="display: none;"></div>
+                <button class="btn" id="loginBtn" style="width: 100%;">Login</button>
+            </div>
+            
+            <div id="editForm" style="display: none; margin-top: 2rem;">
+                <div class="form-group">
+                    <label for="editTitle">Event Title</label>
+                    <input type="text" id="editTitle" placeholder="Event title">
+                </div>
+                <div class="form-group">
+                    <label for="editDescription">Event Description</label>
+                    <textarea id="editDescription" placeholder="Event description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="editDate">Event Date</label>
+                    <input type="text" id="editDate" placeholder="Event date">
+                </div>
+                <div class="form-group">
+                    <label for="editTime">Event Time</label>
+                    <input type="text" id="editTime" placeholder="Event time">
+                </div>
+                <div class="form-group">
+                    <label for="editLocation">Event Location</label>
+                    <input type="text" id="editLocation" placeholder="Event location">
+                </div>
+                <div class="form-group">
+                    <label for="editPrice">Ticket Price</label>
+                    <input type="text" id="editPrice" placeholder="Ticket price">
+                </div>
+                <div class="form-group">
+                    <label for="editPaybill">Buy Goods Till Number</label>
+                    <input type="text" id="editPaybill" placeholder="Buy Goods Till number">
+                </div>
+                <div class="form-group">
+                    <label for="editAccount">Account Number</label>
+                    <input type="text" id="editAccount" placeholder="Account number">
+                </div>
+                <div class="form-group">
+                    <label for="editMpesaAmount">M-Pesa Amount</label>
+                    <input type="text" id="editMpesaAmount" placeholder="M-Pesa amount">
+                </div>
+                <div class="form-group">
+                    <label for="editWhatsapp">WhatsApp Number</label>
+                    <input type="text" id="editWhatsapp" placeholder="WhatsApp number">
+                </div>
+                
+                <button class="btn" id="saveChanges" style="width: 100%; margin-top: 1rem; background: linear-gradient(45deg, #00ff00, #00cc00);">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button class="btn" id="logoutBtn" style="width: 100%; margin-top: 1rem; background: linear-gradient(45deg, #6c5ce7, #a29bfe);">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
     </div>
-  </section>
+    
+    <footer>
+        <p>&copy; 2025 Chucky's Playground. All rights reserved.</p>
+        <p>Made with <i class="fas fa-heart" style="color: var(--neon-pink);"></i> for unforgettable parties</p>
+    </footer>
+    
+    <script>
+        // Create floating background elements
+        (function createFloatingCircles() {
+            try {
+                const floatingCircles = document.getElementById('floatingCircles');
+                for (let i = 0; i < 15; i++) {
+                    const circle = document.createElement('div');
+                    circle.classList.add('floating-circle');
+                    const size = Math.random() * 200 + 50;
+                    circle.style.width = `${size}px`;
+                    circle.style.height = `${size}px`;
+                    circle.style.left = `${Math.random() * 100}%`;
+                    circle.style.top = `${Math.random() * 100}%`;
+                    circle.style.animationDelay = `${Math.random() * 15}s`;
+                    circle.style.opacity = (Math.random() * 0.3 + 0.1).toString();
+                    floatingCircles.appendChild(circle);
+                }
+            } catch (e) {
+                // fail silently if element missing
+                console.error(e);
+            }
+        })();
 
-  <section class="event-details">
-    <div class="event-card">
-      <h3>Event Details</h3>
-      <div class="event-info">
-        <div class="info-item">
-          <i class="fas fa-calendar-alt"></i>
-          <div>
-            <strong>Date</strong>
-            <div id="eventDate">Saturday, December 15, 2025</div>
-          </div>
-        </div>
-        <div class="info-item">
-          <i class="fas fa-clock"></i>
-          <div>
-            <strong>Time</strong>
-            <div id="eventTime">9:00 PM - 5:00 AM</div>
-          </div>
-        </div>
-        <div class="info-item">
-          <i class="fas fa-map-marker-alt"></i>
-          <div>
-            <strong>Location</strong>
-            <div id="eventLocation">The Underground Loft, Nairobi</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+        // ------------------------------
+        // ADMIN + EDITING + localStorage
+        // ------------------------------
+        (function adminAndStorage() {
+            // Elements
+            const adminBtn = document.getElementById('adminBtn');
+            const adminModal = document.getElementById('adminModal');
+            const closeAdmin = document.getElementById('closeAdmin');
 
-  <section class="ticket-section" id="tickets">
-    <h3><i class="fas fa-ticket-alt"></i> Ticket Information</h3>
-    <div class="price" id="ticketPrice">KES 3,000</div>
-    <p>Limited tickets available! Secure your spot now.</p>
+            const loginForm = document.getElementById('loginForm');
+            const editForm = document.getElementById('editForm');
 
-    <div class="mpesa-info">
-      <h4><i class="fab fa-mpesa"></i> M-Pesa Payment Instructions</h4>
-      <ol class="mpesa-steps">
-        <li>Go to M-Pesa on your phone</li>
-        <li>Select <strong>"Buy Goods and Services"</strong></li>
-        <li>Enter Till Number: <strong id="tillNumber">1234567</strong></li>
-        <li>Enter Amount: <strong id="mpesaAmount">3000</strong></li>
-        <li>Enter your M-Pesa PIN and send</li>
-      </ol>
-      <div class="important-note">
-        <p><strong>Important:</strong> After payment, send your M-Pesa confirmation message to <strong id="whatsappNumber">+254700000000</strong> with your full name to confirm your ticket.</p>
-      </div>
-    </div>
+            const loginBtn = document.getElementById('loginBtn');
+            const logoutBtn = document.getElementById('logoutBtn');
 
-    <a href="https://wa.me/254700000000" class="whatsapp-btn">
-      <i class="fab fa-whatsapp"></i> WhatsApp for Confirmation
-    </a>
-  </section>
+            const passwordInput = document.getElementById('adminPassword');
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordError = document.getElementById('passwordError');
 
-  <div class="modal" id="adminModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Admin Access</h3>
-        <button class="close-modal" id="closeAdmin">&times;</button>
-      </div>
+            const saveBtn = document.getElementById('saveChanges');
 
-      <div id="loginForm">
-        <div class="form-group password-input">
-          <label for="adminPassword">Admin Password</label>
-          <input type="password" id="adminPassword" placeholder="Enter admin password" />
-          <button class="toggle-password" id="togglePassword">
-            <i class="fas fa-eye"></i>
-          </button>
-        </div>
-        <div id="passwordError" class="error-message" style="display: none;"></div>
-        <button class="btn" id="loginBtn" style="width: 100%;">Login</button>
-      </div>
+            // default admin password (change locally if you want)
+            const ADMIN_PASSWORD = 'chucky2025';
 
-      <div id="editForm" style="display: none; margin-top: 2rem;">
-        <div class="form-group">
-          <label for="editTitle">Event Title</label>
-          <input type="text" id="editTitle" placeholder="Event title" />
-        </div>
-        <div class="form-group">
-          <label for="editDescription">Event Description</label>
-          <textarea id="editDescription" placeholder="Event description"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="editDate">Event Date</label>
-          <input type="text" id="editDate" placeholder="Event date" />
-        </div>
-        <div class="form-group">
-          <label for="editTime">Event Time</label>
-          <input type="text" id="editTime" placeholder="Event time" />
-        </div>
-        <div class="form-group">
-          <label for="editLocation">Event Location</label>
-          <input type="text" id="editLocation" placeholder="Event location" />
-        </div>
-        <div class="form-group">
-          <label for="editPrice">Ticket Price</label>
-          <input type="text" id="editPrice" placeholder="Ticket price" />
-        </div>
-        <div class="form-group">
-          <label for="editTill">Till Number</label>
-          <input type="text" id="editTill" placeholder="Till number for Buy Goods" />
-        </div>
-        <div class="form-group">
-          <label for="editMpesaAmount">M-Pesa Amount</label>
-          <input type="text" id="editMpesaAmount" placeholder="M-Pesa amount" />
-        </div>
-        <div class="form-group">
-          <label for="editWhatsapp">WhatsApp Number</label>
-          <input type="text" id="editWhatsapp" placeholder="WhatsApp number" />
-        </div>
+            // Helper: show modal (start hidden)
+            function showModal() {
+                adminModal.style.display = 'flex';
+                // ensure login/edit visibility reset appropriately
+                loginForm.style.display = 'block';
+                editForm.style.display = 'none';
+                passwordInput.value = '';
+                passwordError.style.display = 'none';
+            }
 
-        <button class="btn" id="saveChanges" style="width: 100%; margin-top: 1rem; background: linear-gradient(45deg, #00ff00, #00cc00);">
-          <i class="fas fa-save"></i> Save Changes
-        </button>
-        <button class="btn" id="logoutBtn" style="width: 100%; margin-top: 1rem; background: linear-gradient(45deg, #6c5ce7, #a29bfe);">
-          <i class="fas fa-sign-out-alt"></i> Logout
-        </button>
-      </div>
-    </div>
-  </div>
+            function hideModal() {
+                adminModal.style.display = 'none';
+            }
 
-  <footer>
-    <p>© 2025 Chucky's Playground. All rights reserved.</p>
-    <p>
-      Made with <i class="fas fa-heart" style="color: var(--neon-pink)"></i> for
-      unforgettable parties
-    </p>
-  </footer>
+            // Open modal
+            adminBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                showModal();
+            });
 
-  <script>
-    // Floating circles background
-    const floatingCircles = document.getElementById('floatingCircles');
-    for (let i = 0; i < 15; i++) {
-      const circle = document.createElement('div');
-      circle.classList.add('floating-circle');
-      // random size
-      const size = Math.random() * 100 + 50;
-      circle.style.width = size + 'px';
-      circle.style.height = size + 'px';
-      // random position
-      circle.style.top = Math.random() * 100 + '%';
-      circle.style.left = Math.random() * 100 + '%';
-      circle.style.animationDelay = Math.random() * 15 + 's';
-      floatingCircles.appendChild(circle);
-    }
+            // Close modal
+            closeAdmin.addEventListener('click', function (e) {
+                e.preventDefault();
+                hideModal();
+            });
 
-    // Admin modal logic
-    const adminBtn = document.getElementById('adminBtn');
-    const adminModal = document.getElementById('adminModal');
-    const closeAdmin = document.getElementById('closeAdmin');
-    const loginBtn = document.getElementById('loginBtn');
-    const togglePassword = document.getElementById('togglePassword');
-    const adminPassword = document.getElementById('adminPassword');
-    const passwordError = document.getElementById('passwordError');
+            // Toggle password visibility
+            togglePassword.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    togglePassword.innerHTML = '<i class="fas fa-eye-slash"></i>';
+                } else {
+                    passwordInput.type = 'password';
+                    togglePassword.innerHTML = '<i class="fas fa-eye"></i>';
+                }
+            });
 
-    // sample password
-    const ADMIN_PASSWORD = 'yourpassword';
+            // Load data from localStorage (safe defaults if none)
+            function loadData() {
+                const saved = localStorage.getItem('chuckyEventData');
+                if (!saved) {
+                    // Ensure WhatsApp link initial state uses displayed number
+                    const waEl = document.querySelector('.whatsapp-btn');
+                    const displayed = document.getElementById('whatsappNumber')?.textContent || '';
+                    if (waEl && displayed) {
+                        waEl.href = 'https://wa.me/' + displayed.replace(/\D/g, '');
+                    }
+                    return;
+                }
+                try {
+                    const data = JSON.parse(saved);
 
-    adminBtn.addEventListener('click', () => {
-      adminModal.classList.add('show');
-    });
+                    if (data.title) document.getElementById('eventTitle').textContent = data.title;
+                    if (data.description) document.getElementById('eventDescription').textContent = data.description;
+                    if (data.date) document.getElementById('eventDate').textContent = data.date;
+                    if (data.time) document.getElementById('eventTime').textContent = data.time;
+                    if (data.location) document.getElementById('eventLocation').textContent = data.location;
+                    if (data.price) document.getElementById('ticketPrice').textContent = data.price;
 
-    closeAdmin.addEventListener('click', () => {
-      adminModal.classList.remove('show');
-      resetForm();
-    });
+                    // Buy Goods (till) and account
+                    if (data.till) {
+                        const payEl = document.getElementById('paybillNumber') || document.getElementById('tillNumber') || null;
+                        if (payEl) payEl.textContent = data.till;
+                    }
+                    if (data.account) {
+                        const accEl = document.getElementById('accountNumber') || null;
+                        if (accEl) accEl.textContent = data.account;
+                    }
+                    if (data.mpesaAmount) {
+                        const amtEl = document.getElementById('mpesaAmount');
+                        if (amtEl) amtEl.textContent = data.mpesaAmount;
+                    }
+                    if (data.whatsapp) {
+                        const waTxt = document.getElementById('whatsappNumber');
+                        if (waTxt) waTxt.textContent = data.whatsapp;
+                        const waLink = document.querySelector('.whatsapp-btn');
+                        if (waLink) waLink.href = 'https://wa.me/' + data.whatsapp.replace(/\D/g, '');
+                    }
+                } catch (err) {
+                    console.error('Failed to parse saved data', err);
+                }
+            }
 
-    togglePassword.addEventListener('click', () => {
-      const type = adminPassword.type === 'password' ? 'text' : 'password';
-      adminPassword.type = type;
-      togglePassword.innerHTML =
-        type === 'password'
-          ? '<i class=\"fas fa-eye\"></i>'
-          : '<i class=\"fas fa-eye-slash\"></i>';
-    });
+            // Prefill edit fields when admin logs in
+            function loadEditFields() {
+                const saved = localStorage.getItem('chuckyEventData');
+                if (!saved) {
+                    // fill with current displayed values
+                    document.getElementById('editTitle').value = document.getElementById('eventTitle').textContent || '';
+                    document.getElementById('editDescription').value = document.getElementById('eventDescription').textContent || '';
+                    document.getElementById('editDate').value = document.getElementById('eventDate').textContent || '';
+                    document.getElementById('editTime').value = document.getElementById('eventTime').textContent || '';
+                    document.getElementById('editLocation').value = document.getElementById('eventLocation').textContent || '';
+                    document.getElementById('editPrice').value = document.getElementById('ticketPrice').textContent || '';
+                    const payEl = document.getElementById('paybillNumber') || document.getElementById('tillNumber') || { textContent: '' };const accEl = document.getElementById('accountNumber') || { textContent: '' };
+                    document.getElementById('editAccount').value = accEl.textContent || '';
+                    document.getElementById('editMpesaAmount').value = document.getElementById('mpesaAmount').textContent || '';
+                    document.getElementById('editWhatsapp').value = document.getElementById('whatsappNumber').textContent || '';
+                    return;
+                }
 
-    loginBtn.addEventListener('click', () => {
-      const pass = adminPassword.value;
-      if (pass === ADMIN_PASSWORD) {
-        passwordError.style.display = 'none';
-        document.getElementById('loginForm').style.display = 'none';
-        document.getElementById('editForm').style.display = 'block';
-        // Pre-fill with current values
-        document.getElementById('editTitle').value =
-          document.getElementById('eventTitle').textContent;
-        document.getElementById('editDescription').value =
-          document.getElementById('eventDescription').textContent;
-        document.getElementById('editDate').value =
-          document.getElementById('eventDate').textContent;
-        document.getElementById('editTime').value =
-          document.getElementById('eventTime').textContent;
-        document.getElementById('editLocation').value =
-          document.getElementById('eventLocation').textContent;
-        document.getElementById('editPrice').value =
-          document.getElementById('ticketPrice').textContent;
-        document.getElementById('editTill').value =
-          document.getElementById('tillNumber').textContent;
-        document.getElementById('editMpesaAmount').value =
-          document.getElementById('mpesaAmount').textContent;
-        document.getElementById('editWhatsapp').value =
-          document.getElementById('whatsappNumber').textContent;
-      } else {
-        passwordError.textContent = 'Wrong password';
-        passwordError.style.display = 'block';
-      }
-    });
+                try {
+                    const data = JSON.parse(saved);
+                    document.getElementById('editTitle').value = data.title || document.getElementById('eventTitle').textContent || '';
+                    document.getElementById('editDescription').value = data.description || document.getElementById('eventDescription').textContent || '';
+                    document.getElementById('editDate').value = data.date || document.getElementById('eventDate').textContent || '';
+                    document.getElementById('editTime').value = data.time || document.getElementById('eventTime').textContent || '';
+                    document.getElementById('editLocation').value = data.location || document.getElementById('eventLocation').textContent || '';
+                    document.getElementById('editPrice').value = data.price || document.getElementById('ticketPrice').textContent || '';
+                    document.getElementById('editPaybill').value = data.till || (document.getElementById('paybillNumber')?.textContent || '');
+                    document.getElementById('editAccount').value = data.account || (document.getElementById('accountNumber')?.textContent || '');
+                    document.getElementById('editMpesaAmount').value = data.mpesaAmount || (document.getElementById('mpesaAmount')?.textContent || '');
+                    document.getElementById('editWhatsapp').value = data.whatsapp || (document.getElementById('whatsappNumber')?.textContent || '');
+                } catch (err) {
+                    console.error('Failed to parse saved data for edit fields', err);
+                }
+            }
 
-    document.getElementById('saveChanges').addEventListener('click', () => {
-      document.getElementById('eventTitle').textContent =
-        document.getElementById('editTitle').value;
-      document.getElementById('eventDescription').textContent =
-        document.getElementById('editDescription').value;
-      document.getElemen
+            // Login click logic
+            loginBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const val = passwordInput.value || '';
+                if (val === ADMIN_PASSWORD) {
+                    passwordError.style.display = 'none';
+                    loginForm.style.display = 'none';
+                    editForm.style.display = 'block';
+                    loadEditFields();
+                } else {
+                    passwordError.textContent = 'Wrong password';
+                    passwordError.style.display = 'block';
+                }
+            });
+
+            // Save changes logic
+            saveBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const newData = {
+                    title: document.getElementById('editTitle').value || '',
+                    description: document.getElementById('editDescription').value || '',
+                    date: document.getElementById('editDate').value || '',
+                    time: document.getElementById('editTime').value || '',
+                    location: document.getElementById('editLocation').value || '',
+                    price: document.getElementById('editPrice').value || '',
+                    // Buy Goods Till Number
+                    till: document.getElementById('editPaybill').value || '',
+                    account: document.getElementById('editAccount').value || '',
+                    mpesaAmount: document.getElementById('editMpesaAmount').value || '',
+                    whatsapp: document.getElementById('editWhatsapp').value || ''
+                };
+
+                try {
+                    localStorage.setItem('chuckyEventData', JSON.stringify(newData));
+
+                    // Immediately reflect changes on page
+                    if (newData.title) document.getElementById('eventTitle').textContent = newData.title;
+                    if (newData.description) document.getElementById('eventDescription').textContent = newData.description;
+                    if (newData.date) document.getElementById('eventDate').textContent = newData.date;
+                    if (newData.time) document.getElementById('eventTime').textContent = newData.time;
+                    if (newData.location) document.getElementById('eventLocation').textContent = newData.location;
+                    if (newData.price) document.getElementById('ticketPrice').textContent = newData.price;
+
+                    // Buy Goods till & account
+                    const payEl = document.getElementById('paybillNumber') || document.getElementById('tillNumber') || null;
+                    if (payEl) payEl.textContent = newData.till;
+                    const accEl = document.getElementById('accountNumber') || null;
+                    if (accEl) accEl.textContent = newData.account;
+                    if (newData.mpesaAmount) document.getElementById('mpesaAmount').textContent = newData.mpesaAmount;
+
+                    // WhatsApp number and link
+                    if (newData.whatsapp) {
+                        const waTxt = document.getElementById('whatsappNumber');
+                        if (waTxt) waTxt.textContent = newData.whatsapp;
+                        const waLink = document.querySelector('.whatsapp-btn');
+                        if (waLink) waLink.href = 'https://wa.me/' + newData.whatsapp.replace(/\D/g, '');
+                    }
+
+                    alert('Changes saved successfully.');
+                    // Return to login view (optional)
+                    editForm.style.display = 'none';
+                    loginForm.style.display = 'block';
+                    passwordInput.value = '';
+                    hideModal();
+                } catch (err) {
+                    console.error('Failed to save changes', err);
+                    alert('Failed saving changes. See console for details.');
+                }
+            });
+
+            // Logout
+            logoutBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                editForm.style.display = 'none';
+                loginForm.style.display = 'block';
+                passwordInput.value = '';
+                hideModal();
+            });
+
+            // Click outside modal content closes modal
+            window.addEventListener('click', function (e) {
+                if (e.target === adminModal) {
+                    hideModal();
+                }
+            });
+
+            // Initialize on load
+            loadData();
+            // Ensure modal hidden on page load
+            adminModal.style.display = 'none';
+        })();
+    </script>
+</body>
+</html>
+                    
