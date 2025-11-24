@@ -1,117 +1,465 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chucky’s Playground</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chucky's Playground — House Party Tickets</title>
+  <meta name="description" content="Buy tickets for house parties — M-PESA Buy Goods enabled. Admin editable."/>
+  <link rel="icon" href="data:," />
   <style>
-    /* Global reset + base styling */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    /* ------- condensed, responsive styling inspired by original file ------- */
+    :root{
+      --primary:#ff2e63;--accent:#2ec4b6;--dark:#0f0c29;--panel:rgba(20,20,40,0.85);--muted:#cfcfd6;
+      --glass: rgba(255,255,255,0.03);
+      --radius:16px;
     }
-
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      color: #ffffff;
-      background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, "Segoe UI", system-ui, Roboto, Arial;
+      background: linear-gradient(135deg,#0f0c29,#302b63,#24243e); color:#fff;
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+      min-height:100vh; display:flex; flex-direction:column;
     }
-
-    header {
-      padding: 20px;
-      text-align: center;
-      background-color: rgba(0, 0, 0, 0.5);
+    header{position:sticky; top:0; z-index:20; background:rgba(0,0,0,0.45); backdrop-filter:blur(6px); border-bottom:2px solid rgba(255,46,99,0.08)}
+    .nav{max-width:1100px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .logo{display:flex;align-items:center;gap:10px}
+    .logo .icon{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--primary),#f8b500);display:flex;align-items:center;justify-content:center;font-weight:800;color:#111}
+    .logo h1{font-size:1.1rem;margin:0;color:var(--primary)}
+    nav a{color:#e8e8ee;text-decoration:none;margin-left:14px;font-weight:600}
+    nav a.active{color:var(--primary)}
+    main{max-width:1100px;margin:28px auto;padding:20px;width:100%;flex:1}
+    .card{background:var(--panel);border-radius:var(--radius);padding:18px;box-shadow:0 8px 30px rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.03)}
+    .hero{display:grid;grid-template-columns:1fr;gap:18px;align-items:center;padding:28px;border-radius:16px;overflow:hidden;background-image:
+      radial-gradient(circle at 10% 20%, rgba(255,46,99,0.06), transparent 15%),
+      radial-gradient(circle at 90% 80%, rgba(248,181,0,0.04), transparent 15%);}
+    .hero .left{padding:10px}
+    .hero h2{font-size:2.4rem;margin:0 0 8px; color:linear-gradient(45deg,var(--primary),#f8b500)}
+    .hero p{color:var(--muted);margin-bottom:14px}
+    .btn{display:inline-block;padding:12px 18px;border-radius:999px;font-weight:700;text-decoration:none;cursor:pointer}
+    .btn-primary{background:linear-gradient(90deg,var(--primary),#f8b500);color:#111}
+    .btn-outline{border:2px solid var(--primary);color:var(--primary);background:transparent}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+    .event-card{min-height:220px;border-radius:12px;overflow:hidden;position:relative}
+    .event-card .img{height:230px;background-size:cover;background-position:center}
+    .event-card .info{padding:12px;background:linear-gradient(180deg, rgba(0,0,0,0.25), transparent);position:relative}
+    .muted{color:var(--muted);font-size:0.95rem}
+    footer{padding:18px 20px;text-align:center;color:var(--muted);font-size:0.9rem}
+    /* small forms */
+    label{display:block;font-weight:700;margin-bottom:6px;color:#f0f0f5}
+    input,select,textarea{width:100%;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:#fff}
+    .row{display:flex;gap:12px}
+    .row>.col{flex:1}
+    .center{display:flex;align-items:center;justify-content:center}
+    /* admin badge */
+    .badge{display:inline-block;padding:6px 10px;background:rgba(255,46,99,0.12);color:var(--primary);border-radius:999px;font-weight:700}
+    /* small screens tweaks */
+    @media (min-width:900px){
+      .hero{grid-template-columns:1fr 420px}
+      .hero h2{font-size:3rem}
     }
-
-    header h1 {
-      font-size: 2rem;
-      color: #ff2e63;
-    }
-
-    .hero {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 40px 20px;
-      background: url('https://via.placeholder.com/600x500/1a1a2e/ff2e63?text=House+Party') no-repeat center/cover;
-      background-color: #1a1a2e; /* fallback if image fails */
-      min-height: 300px;
-    }
-
-    .hero h2 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #ffffff;
-      text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      max-width: 600px;
-      color: #ddd;
-    }
-
-    .section {
-      padding: 40px 20px;
-      background-color: rgba(36, 36, 62, 0.9);
-    }
-
-    .section h3 {
-      font-size: 1.8rem;
-      margin-bottom: 20px;
-      color: #ff2e63;
-    }
-
-    .section p {
-      font-size: 1rem;
-      color: #eee;
-    }
-
-    footer {
-      padding: 20px;
-      text-align: center;
-      background-color: rgba(0, 0, 0, 0.7);
-      font-size: 0.9rem;
-    }
-
-    footer a {
-      color: #ff2e63;
-      text-decoration: none;
-    }
+    /* small toast */
+    .toast{position:fixed;right:18px;bottom:18px;background:#111;padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.04)}
   </style>
 </head>
 <body>
   <header>
-    <h1>Chucky’s Playground</h1>
+    <div class="nav">
+      <div class="logo">
+        <div class="icon">CP</div>
+        <div><h1>Chucky's Playground</h1><div class="muted" style="font-size:12px">House party events • Tickets • Mpesa Buy Goods</div></div>
+      </div>
+      <nav id="mainNav">
+        <a href="#home" data-link>Home</a>
+        <a href="#event" data-link>Event</a>
+        <a href="#checkout" data-link>Checkout</a>
+        <a href="#dashboard" data-link>Dashboard</a>
+        <a href="#admin" data-link>Admin</a>
+        <a href="#about" data-link>About</a>
+      </nav>
+    </div>
   </header>
 
-  <section class="hero">
-    <div>
-      <h2>Welcome to the Ultimate Fun Zone</h2>
-      <p>Jump into Chucky’s Playground — the place where adventures never end. Whether it's games, challenges, or just plain fun, we’ve got you.</p>
-    </div>
-  </section>
-
-  <section class="section">
-    <h3>About Us</h3>
-    <p>Chucky’s Playground is a community built for play, imagination, and creativity. Join us for events, contests, and a whole lot of laughs.</p>
-  </section>
-
-  <section class="section">
-    <h3>Join the Fun</h3>
-    <p>Want to be part of the playground? Sign up, invite your friends, and let’s make memories together.</p>
-  </section>
+  <main id="app" role="main">
+    <!-- app content generated by JS -->
+  </main>
 
   <footer>
-    <p>&copy; 2025 Chucky’s Playground. Built and maintained by Daniel.</p>
-    <p><a href="https://github.com/danielskumbo-sys/chuckysplayground.github.io">GitHub Repo</a></p>
+    © <span id="year"></span> Chucky's Playground • Built with ❤️ • <a id="repoLink" href="#" target="_blank" style="color:var(--primary)">GitHub Repo</a>
   </footer>
-</body>
-</html>
+
+  <div id="toast" class="toast" style="display:none"></div>
+
+<script>
+/*
+  Single-file SPA implementing:
+  - Home, Event, Checkout, Dashboard, Admin, About
+  - Admin editing (client-side, localStorage)
+  - Mock M-PESA Buy Goods flow (front-end posts to MPESA_API_URL)
+  Notes:
+    • I used your original index.html as the source for styles/content and repaired it. See: uploaded file. 1
+    • Replace ADMIN_PASSWORD and MPESA_API_URL with real values.
+*/
+
+/* --------- CONFIG (CHANGE THESE) --------- */
+const ADMIN_PASSWORD = "changeme"; // <-- change this to a strong secret before publishing
+const MPESA_API_URL = "https://YOUR_BACKEND.example.com/mpesa/buygoods"; // <-- your backend endpoint that triggers M-PESA Buy Goods
+const GITHUB_REPO_URL = "https://github.com/danielskumbo-sys/chuckysplayground.github.io";
+
+/* --------- utility functions --------- */
+const el = (tag, props={}, ...children) => {
+  const e = document.createElement(tag);
+  Object.entries(props).forEach(([k,v])=>{
+    if(k==='class') e.className = v;
+    else if(k==='html') e.innerHTML = v;
+    else if(k==='onclick') e.addEventListener('click', v);
+    else e.setAttribute(k,v);
+  });
+  children.flat().forEach(c=>{ if(c==null) return; e.append(typeof c==="string"?document.createTextNode(c):c); });
+  return e;
+};
+const q = s => document.querySelector(s);
+const showToast = (txt, ms=3000) => {
+  const t = q('#toast');
+  t.innerText = txt; t.style.display='block';
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.style.display='none', ms);
+};
+
+/* --------- default site data (editable via admin) --------- */
+const defaultData = {
+  siteTitle: "Chucky's Playground",
+  heroTitle: "Welcome to the Ultimate House Party",
+  heroSubtitle: "Buy tickets, join the dance floor — Mpesa Buy Goods ready.",
+  event: {
+    id: "evt1",
+    title: "Chucky's Epic House Party",
+    date: "2025-12-20 22:00",
+    location: "Daniel's Villa • Nairobi",
+    price: 1200,
+    currency: "KES",
+    image: "https://via.placeholder.com/1200x800/1a1a2e/ff2e63?text=House+Party",
+    description: "An unforgettable night with DJs, premium bar and dance floor. Limited tickets.",
+    seats: 200
+  },
+  users: [], // not used for auth; just sample for dashboard
+  purchases: []
+};
+
+/* load/save */
+function loadData(){ try{ return JSON.parse(localStorage.getItem('cp_data')) || defaultData }catch(e){ return defaultData } }
+function saveData(d){ localStorage.setItem('cp_data', JSON.stringify(d)); }
+
+/* initial */
+let DATA = loadData();
+saveData(DATA); // ensure always present
+q('#year').innerText = new Date().getFullYear();
+q('#repoLink').href = GITHUB_REPO_URL;
+
+/* ---------- router ---------- */
+function navigate(hash){
+  location.hash = hash;
+}
+function currentHash(){ return location.hash.replace('#','') || 'home' }
+window.addEventListener('hashchange', render);
+document.addEventListener('click', e=>{
+  const a = e.target.closest('a[data-link]');
+  if(a){ e.preventDefault(); const href = (a.getAttribute('href')||'#home').replace('#',''); navigate(href); }
+});
+
+/* ---------- components / views ---------- */
+
+function headerNavActive(){
+  document.querySelectorAll('#mainNav a').forEach(a=>{
+    a.classList.toggle('active', a.getAttribute('href') === '#'+currentHash());
+  });
+}
+
+/* HOME */
+function viewHome(){
+  const cfg = DATA;
+  const hero = el('section',{class:'card hero'},
+    el('div',{class:'left'},
+      el('h2',{}, cfg.heroTitle),
+      el('p',{}, cfg.heroSubtitle),
+      el('div',{},
+         el('a',{class:'btn btn-primary', href:'#event', 'data-link':true}, 'View Event'),
+         el('a',{class:'btn btn-outline', href:'#checkout', style:'margin-left:10px','data-link':true}, 'Buy Ticket')
+      )
+    ),
+    el('div',{class:'card', style:'padding:12px;max-width:420px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent)'},
+       el('img',{src:cfg.event.image, alt:'event image', style:'width:100%;border-radius:8px;height:200px;object-fit:cover'}),
+       el('div',{style:'padding:10px 6px'},
+          el('h3',{}, cfg.event.title),
+          el('div',{class:'muted'}, `${cfg.event.date} • ${cfg.event.location}`),
+          el('div',{style:'margin-top:8px',class:'muted'}, `${cfg.event.currency} ${cfg.event.price} per ticket`),
+          el('div',{style:'margin-top:12px;display:flex;gap:8px'},
+            el('a',{class:'btn btn-primary', href:'#checkout','data-link':true}, 'Checkout'),
+            el('a',{class:'btn btn-outline', href:'#event','data-link':true}, 'More details')
+          )
+       )
+    )
+  );
+
+  const sections = el('div',{},
+    el('div',{class:'card', style:'margin-top:18px'},
+       el('h3',{}, 'Upcoming Event'),
+       el('p',{class:'muted'}, cfg.event.description)
+    ),
+    el('div',{style:'margin-top:14px',class:'card'},
+       el('h3',{}, 'Why attend?'),
+       el('p',{class:'muted'}, 'House party vibes, premium bar, DJ sessions, and a crowd that knows how to party. Secure your ticket.')
+    )
+  );
+
+  return el('div',{}, hero, sections);
+}
+
+/* EVENT details */
+function viewEvent(){
+  const e = DATA.event;
+  return el('div',{},
+    el('div',{class:'card'},
+      el('div', {style:'display:flex;flex-direction:column;gap:12px'},
+         el('img',{src:e.image, style:'width:100%;height:380px;object-fit:cover;border-radius:10px'}),
+         el('h2',{}, e.title),
+         el('div',{class:'muted'}, `${e.date} • ${e.location}`),
+         el('p',{class:'muted'}, e.description),
+         el('div',{style:'display:flex;gap:10px;align-items:center;margin-top:8px'},
+             el('div',{class:'badge'}, `${e.currency} ${e.price}`),
+             el('div',{style:'margin-left:auto'}, el('a',{class:'btn btn-primary', href:'#checkout','data-link':true}, 'Buy Ticket'))
+         )
+      )
+    )
+  );
+}
+
+/* CHECKOUT */
+function viewCheckout(){
+  const e = DATA.event;
+  const container = el('div',{},
+    el('div',{class:'card'},
+      el('h2',{}, 'Checkout'),
+      el('div', {style:'margin-top:8px', class:'muted'}, `Event: ${e.title}`),
+      el('form',{id:'checkoutForm', onsubmit: (ev)=>{ev.preventDefault(); onCheckoutSubmit(); }},
+         el('div',{style:'margin-top:12px'},
+            el('label',{}, 'Full name'),
+            el('input',{id:'buyerName', placeholder:'Your full name', required:true})
+         ),
+         el('div',{style:'margin-top:12px'},
+            el('label',{}, 'Phone (M-PESA number, e.g. 2547XXXXXXXX)'),
+            el('input',{id:'buyerPhone', placeholder:'2547XXXXXXXX', required:true})
+         ),
+         el('div',{style:'margin-top:12px'},
+            el('label',{}, 'Quantity'),
+            el('input',{id:'qty', type:'number', min:1, value:1, required:true})
+         ),
+         el('div',{style:'margin-top:12px',class:'row'},
+            el('div',{class:'col'},
+              el('label',{}, 'Payment method'),
+              el('select',{id:'payMethod'},
+                 el('option',{value:'mpesa'}, 'M-PESA (Buy Goods)'),
+                 el('option',{value:'manual'}, 'Manual / Other')
+              )
+            ),
+            el('div',{class:'col'}, el('label',{}, 'Promo code (optional)'), el('input',{id:'promo', placeholder:'If any'}))
+         ),
+         el('div',{style:'margin-top:14px;display:flex;gap:10px;align-items:center'},
+            el('button',{class:'btn btn-primary', type:'submit'}, 'Pay / Request M-PESA'),
+            el('button',{type:'button', class:'btn btn-outline', onclick:()=>{navigate('#event')}}, 'Back')
+         ),
+         el('p',{class:'muted', style:'margin-top:10px'}, 'Note: M-PESA Buy Goods requires a server to call Safaricom APIs. The site will POST to your backend endpoint (see config).')
+      )
+    )
+  );
+  return container;
+}
+
+/* Dashboard (user purchases) */
+function viewDashboard(){
+  const purchases = DATA.purchases || [];
+  return el('div',{},
+    el('div',{class:'card'},
+      el('h2',{}, 'User Dashboard'),
+      purchases.length===0 ? el('p', {class:'muted'}, 'No purchases yet. Your confirmed orders will appear here.') :
+      el('div',{},
+         purchases.map(p => el('div',{style:'padding:12px;border-bottom:"1px solid rgba(255,255,255,0.03);margin-bottom:8px'},
+            el('strong',{}, p.name + ' '),
+            el('div',{class:'muted'}, `Phone: ${p.phone} • Qty: ${p.qty} • Total: ${p.currency} ${p.total}`),
+            el('div',{class:'muted'}, `Status: ${p.status}`)
+         ))
+      )
+    )
+  );
+}
+
+/* Admin panel (login + editor) */
+function viewAdmin(){
+  const logged = sessionStorage.getItem('cp_admin') === '1';
+  if(!logged){
+    return el('div',{},
+      el('div',{class:'card'},
+         el('h2',{}, 'Admin Login'),
+         el('p',{class:'muted'}, 'Enter admin password to edit site content.'),
+         el('form',{onsubmit:(ev)=>{ev.preventDefault(); tryAdminLogin() }},
+            el('label',{}, 'Password'),
+            el('input',{id:'adminPass', type:'password', placeholder:'Admin password', required:true}),
+            el('div',{style:'margin-top:12px'}, el('button',{class:'btn btn-primary', type:'submit'}, 'Login'))
+         ),
+         el('p',{class:'muted', style:'marginTop:10px'}, 'Admin edits are saved to your browser localStorage.')
+      )
+    );
+  } else {
+    // editor
+    const cfg = DATA;
+    return el('div',{},
+      el('div',{class:'card'},
+        el('div',{style:'display:flex;align-items:center;gap:12px'},
+           el('h2',{}, 'Admin Panel'),
+           el('button',{class:'btn btn-outline', onclick:()=>{sessionStorage.removeItem('cp_admin'); navigate('#home')}}, 'Logout')
+        ),
+        el('form',{id:'adminForm', onsubmit:(ev)=>{ev.preventDefault(); saveAdminEdits() }},
+           el('label',{}, 'Site title'),
+           el('input',{id:'admin_siteTitle', value:cfg.siteTitle}),
+           el('label',{}, 'Hero title'),
+           el('input',{id:'admin_heroTitle', value:cfg.heroTitle}),
+           el('label',{}, 'Hero subtitle'),
+           el('input',{id:'admin_heroSubtitle', value:cfg.heroSubtitle}),
+           el('hr',{}),
+           el('label',{}, 'Event title'),
+           el('input',{id:'admin_evt_title', value:cfg.event.title}),
+           el('label',{}, 'Event date & time'),
+           el('input',{id:'admin_evt_date', value:cfg.event.date}),
+           el('label',{}, 'Event location'),
+           el('input',{id:'admin_evt_loc', value:cfg.event.location}),
+           el('label',{}, 'Event image URL'),
+           el('input',{id:'admin_evt_image', value:cfg.event.image}),
+           el('label',{}, 'Price'),
+           el('input',{id:'admin_evt_price', value:cfg.event.price}),
+           el('label',{}, 'Currency'),
+           el('input',{id:'admin_evt_currency', value:cfg.event.currency}),
+           el('label',{}, 'Description'),
+           el('textarea',{id:'admin_evt_desc', rows:5}, cfg.event.description),
+           el('div',{style:'margin-top:12px;display:flex;gap:10px'},
+              el('button',{class:'btn btn-primary', type:'submit'}, 'Save changes'),
+              el('button',{type:'button', class:'btn btn-outline', onclick:()=>{downloadSiteData()}}, 'Export data'),
+              el('button',{type:'button', class:'btn btn-outline', onclick:()=>{resetToDefault()}}, 'Reset to default')
+           ),
+           el('p',{class:'muted', style:'marginTop:10px'}, 'Save will persist changes to your browser localStorage.')
+        )
+      )
+    );
+  }
+}
+
+/* ABOUT */
+function viewAbout(){
+  return el('div',{},
+    el('div',{class:'card'},
+       el('h2',{}, 'About'),
+       el('p',{class:'muted'}, 'Chucky\'s Playground is a community-driven house party events site. This static demo supports client-side admin editing and a checkout flow that can be integrated with M-PESA Buy Goods via a backend.')
+    )
+  );
+}
+
+/* -------------- handlers -------------- */
+
+async function onCheckoutSubmit(){
+  const name = q('#buyerName').value.trim();
+  const phone = q('#buyerPhone').value.trim();
+  const qty = parseInt(q('#qty').value,10) || 1;
+  const pmethod = q('#payMethod').value;
+  if(!name || !phone) { showToast('Please fill name & phone'); return; }
+
+  const evt = DATA.event;
+  const total = evt.price * qty;
+
+  // create a purchase record
+  const purchase = {
+    id: 'p_' + Date.now(),
+    name, phone, qty, total,
+    currency: evt.currency, eventId: evt.id,
+    status: 'pending',
+    created: new Date().toISOString()
+  };
+
+  // if M-PESA selected -> POST to backend to perform Buy Goods STK Push
+  if(pmethod === 'mpesa'){
+    showToast('Initiating M-PESA buy goods request...');
+    try {
+      // FRONT-END: call your backend endpoint (must be implemented by you) that will call Safaricom
+      // Example POST body:
+      const payload = { name, phone, qty, total, eventId: evt.id, description: evt.title };
+      // If MPESA_API_URL is not set, we'll simulate success:
+      if(!MPESA_API_URL || MPESA_API_URL.includes('YOUR_BACKEND')){
+        // simulate network latency & success
+        await new Promise(r=>setTimeout(r,1200));
+        purchase.status = 'paid (simulated)';
+        DATA.purchases = DATA.purchases || [];
+        DATA.purchases.push(purchase);
+        saveData(DATA);
+        showToast('Payment simulated SUCCESS. Check Dashboard.');
+        navigate('#dashboard');
+        render();
+        return;
+      }
+
+      const resp = await fetch(MPESA_API_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(payload)
+      });
+      const json = await resp.json();
+      // Expect your backend to return { success: true, message: "...", receiptId: "..." }
+      if(json && json.success){
+        purchase.status = 'paid';
+        purchase.receipt = json.receipt || null;
+        DATA.purchases = DATA.purchases || [];
+        DATA.purchases.push(purchase);
+        saveData(DATA);
+        showToast('Payment successful. Check Dashboard.');
+        navigate('#dashboard');
+        render();
+      } else {
+        purchase.status = 'failed';
+        DATA.purchases = DATA.purchases || [];
+        DATA.purchases.push(purchase);
+        saveData(DATA);
+        showToast('Payment failed: ' + (json && json.message ? json.message : 'unknown'));
+      }
+    } catch(err){
+      console.error(err);
+      showToast('Network error while contacting MPESA endpoint.');
+      purchase.status = 'failed';
+      DATA.purchases = DATA.purchases || [];
+      DATA.purchases.push(purchase);
+      saveData(DATA);
+    }
+  } else {
+    // manual flow
+    purchase.status = 'manual - pending';
+    DATA.purchases = DATA.purchases || [];
+    DATA.purchases.push(purchase);
+    saveData(DATA);
+    showToast('Order saved. Complete manual payment as instructed.');
+    navigate('#dashboard');
+    render();
+  }
+}
+
+/* Admin controls */
+function tryAdminLogin(){
+  const val = q('#adminPass').value || '';
+  if(val === ADMIN_PASSWORD){
+    sessionStorage.setItem('cp_admin', '1');
+    showToast('Admin login successful');
+    navigate('#admin');
+    render();
+  } else {
+    showToast('Wrong password');
+  }
+}
+function saveAdminEdits(){
+  DATA.siteTitle = q('#admin_siteTitle').value;
+  DATA.heroTitle = q('#admin_heroTitle').value;
+  
